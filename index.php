@@ -1,0 +1,358 @@
+<?php
+// Variabel PHP
+$namaSekolah = "Universitas Retch";
+$tahunAkademik = "2024/2025";
+$semester = "Spring";
+$totalMahasiswa = 1250;
+$totalKursus = 48;
+$totalDosen = 32;
+
+// Percabangan Sederhana
+$pendaftaranDibuka = true;
+$statusPendaftaran = ($pendaftaranDibuka) ? "Dibuka" : "Ditutup";
+
+// Percabangan Tambahan
+if ($totalMahasiswa > 1000) {
+    $pesanMahasiswa = "Kami memiliki jumlah mahasiswa yang besar!";
+} else {
+    $pesanMahasiswa = "Jumlah mahasiswa kami terus bertambah!";
+}
+
+// Array pengumuman
+$pengumuman = [
+    "Pendaftaran musim panas dimulai minggu depan!",
+    "Kursus baru ditambahkan untuk semester berikutnya",
+    "Jam perpustakaan diperpanjang selama ujian akhir"
+];
+
+// Array Tambahan
+$kursus = [
+    "Dasar-Dasar Jaringan", 
+    "Struktur Data dan Algoritma", 
+    "Ilmu Komputer", 
+    "Siklus Hidup Pengembangan Perangkat Lunak"
+];
+$dosen = ["Bapak Smith", "Ibu Johnson", "Dr. Brown", "Prof. Wilson"];
+
+// Fungsi untuk menghitung jumlah pengumuman
+function hitungPengumuman($pengumuman) {
+    return count($pengumuman);
+}
+$totalPengumuman = hitungPengumuman($pengumuman);
+
+// Prosedur untuk mencetak daftar dosen
+function cetakDosen($dosen) {
+    foreach ($dosen as $namaDosen) {
+        echo "<li>" . $namaDosen . "</li>";
+    }
+}
+
+// Data Mahasiswa Bulanan
+$mahasiswaBulanan = [1150, 1180, 1200, 1220, 1240, 1250];
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Portal Mahasiswa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #4e73df, #1cc88a);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        .card h6 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .card h2 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .announcement-item {
+            transition: background 0.3s ease;
+        }
+        .announcement-item:hover {
+            background: #f8f9fa;
+        }
+        footer {
+            background: #4e73df;
+            color: white;
+        }
+        footer p {
+            margin: 0;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #4e73df, #1cc88a);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #1cc88a, #4e73df);
+        }
+        @media (max-width: 768px) {
+            .announcements-title {
+                margin-top: 40px;
+            }
+            .card-title {
+                margin-top: 40px; /* Tambahkan jarak atas untuk tampilan mobile */
+            }
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">Portal Mahasiswa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="students.php">Mahasiswa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="grades.php">Nilai</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.php">Kursus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registration.php">Pendaftaran</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="text-center py-5" style="background: linear-gradient(135deg, #4e73df, #1cc88a); color: white; border-radius: 15px;">
+            <h1 class="display-4 fw-bold">
+                <i class='bx bxs-school'></i> Selamat Datang di <?php echo $namaSekolah; ?>
+            </h1>
+            <p class="lead mt-3" style="font-size: 1.2rem;">
+                <?php echo $pesanMahasiswa; ?>
+            </p>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Statistik Cepat -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-primary text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>Total Mahasiswa</h6>
+                                <h2><?php echo number_format($totalMahasiswa); ?></h2>
+                            </div>
+                            <i class='bx bxs-graduation bx-lg'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="card bg-success text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>Kursus Aktif</h6>
+                                <h2><?php echo $totalKursus; ?></h2>
+                            </div>
+                            <i class='bx bxs-book bx-lg'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="card bg-info text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>Dosen</h6>
+                                <h2><?php echo $totalDosen; ?></h2>
+                            </div>
+                            <i class='bx bxs-user-voice bx-lg'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="card bg-warning text-white h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>Pendaftaran</h6>
+                                <h2><?php echo $statusPendaftaran; ?></h2>
+                            </div>
+                            <i class='bx bxs-calendar-check bx-lg'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistik Grafik -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tren Pertumbuhan Mahasiswa</h5>
+                        <div class="chart-container">
+                            <canvas id="studentGrowthChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Distribusi Kursus</h5>
+                        <div class="chart-container">
+                            <canvas id="courseDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Mahasiswa Bulanan -->
+            <div class="col-md-6">
+                <h5 class="text-primary mb-3">
+                    <i class='bx bxs-bar-chart-alt-2'></i> Mahasiswa Bulanan
+                </h5>
+                <ul class="list-group">
+                    <?php foreach ($mahasiswaBulanan as $bulan => $jumlah): ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Bulan <?php echo $bulan + 1; ?>:</strong></span>
+                            <span class="badge bg-primary rounded-pill"><?php echo $jumlah; ?> mahasiswa</span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+            <!-- Pengumuman -->
+            <div class="col-md-6">
+                <h5 class="text-success mb-3 announcements-title">
+                    <i class='bx bxs-megaphone'></i> Pengumuman (<?php echo $totalPengumuman; ?>)
+                </h5>
+                <div class="list-group">
+                    <?php foreach ($pengumuman as $item): ?>
+                        <div class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class='bx bxs-bell text-warning me-3'></i>
+                            <span><?php echo $item; ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Universitas Retch by Andreas Rio C. Semua Hak Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Grafik Pertumbuhan Mahasiswa
+        const growthCtx = document.getElementById('studentGrowthChart').getContext('2d');
+        new Chart(growthCtx, {
+            type: 'line',
+            data: {
+                labels: ['Bulan 1', 'Bulan 2', 'Bulan 3', 'Bulan 4', 'Bulan 5', 'Bulan 6'],
+                datasets: [{
+                    label: 'Jumlah Mahasiswa',
+                    data: <?php echo json_encode($mahasiswaBulanan); ?>,
+                    fill: true,
+                    borderColor: '#4e73df',
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    tension: 0.4,
+                    pointBackgroundColor: '#4e73df',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#4e73df'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: Math.min(...<?php echo json_encode($mahasiswaBulanan); ?>) - 50,
+                        max: Math.max(...<?php echo json_encode($mahasiswaBulanan); ?>) + 50
+                    }
+                }
+            }
+        });
+
+        // Grafik Distribusi Kursus
+        const distributionCtx = document.getElementById('courseDistributionChart').getContext('2d');
+        new Chart(distributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: <?php echo json_encode($kursus); ?>,
+                datasets: [{
+                    data: [30, 25, 25, 20],
+                    backgroundColor: [
+                        'rgba(78, 115, 223, 0.8)',   // Biru untuk Dasar-Dasar Jaringan
+                        'rgba(28, 200, 138, 0.8)',   // Hijau untuk Struktur Data dan Algoritma
+                        'rgba(54, 185, 204, 0.8)',   // Cyan untuk Ilmu Komputer
+                        'rgba(246, 194, 62, 0.8)'    // Kuning untuk Siklus Hidup Pengembangan Perangkat Lunak
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
